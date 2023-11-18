@@ -287,12 +287,13 @@ def get_array():
     if request.method == 'POST':
         if 'file' in request.files:
             image = request.files['file']
-            if image is not None:
-                if image:
-                    flanme = secure_filename(image.filename)
-                    image.save(os.path.join(app.config['UPLOAD_FOLDER'],flanme))
-                fname = image.filename    
-                data_to_send = get_landmark_coordinates('/Users/vansh/Desktop/test/upload_images/{}'.format(fname))
+            if image is not None:    
+                flanme = secure_filename(image.filename)
+                image_path = os.path.join(app.config['UPLOAD_FOLDER'],flanme)
+                image.save(image_path)
+                #fname = image.filename    
+                #data_to_send = get_landmark_coordinates('/Users/vansh/Desktop/test/upload_images/{}'.format(fname))
+                data_to_send = get_landmark_coordinates(image_path)
                 print(data_to_send)
                 if data_to_send is not None:
                     suggestions = evaluate_surya_namaskar_pose(data_to_send)
