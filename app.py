@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, render_template, request, jsonify
 from werkzeug.utils import secure_filename
 from PIL import Image
 
@@ -285,14 +285,23 @@ app = Flask(__name__, template_folder="template")
 @app.route('/get_array', methods=['POST'])
 def get_array():
     if request.method == 'POST':
-        #print(data_to_send)
         data_to_send = get_landmark_coordinates('/Users/vansh/Desktop/test/pose2.jpg')
         if data_to_send is not None:
-           suggestions = evaluate_surya_namaskar_pose(data_to_send)
-           return jsonify(suggestions)
+            suggestions = evaluate_surya_namaskar_pose(data_to_send)
+            return render_template('result.html', suggestions=suggestions)
         else:
-            #print("Error: Failed to process the image")
             return "Error: Failed to process the image", 500
+# @app.route('/get_array', methods=['POST'])
+# def get_array():
+#     if request.method == 'POST':
+#         #print(data_to_send)
+#         data_to_send = get_landmark_coordinates('/Users/vansh/Desktop/test/pose2.jpg')
+#         if data_to_send is not None:
+#            suggestions = evaluate_surya_namaskar_pose(data_to_send)
+#            return jsonify(suggestions)
+#         else:
+#             #print("Error: Failed to process the image")
+#             return "Error: Failed to process the image", 500
         # if 'file' in request.files:
         #     image = request.files['file']
         #     if image is not None:
