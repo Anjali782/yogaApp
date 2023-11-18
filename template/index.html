@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Array Data</title>
+</head>
+<body>
+    <h1>Array Data</h1>
+    <div id="data"></div>
+
+    <script>
+        // Fetch the data from the server and display it on the web page
+        fetch('/get_array', { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                // Display the data on the page
+                document.getElementById('data').textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('data').textContent = 'Error fetching data.';
+            });
+    </script>
+</body>
+</html>
