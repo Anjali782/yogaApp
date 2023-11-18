@@ -14,7 +14,7 @@ from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 
 
-UPLOAD_FOLDER = '/Users/vansh/Desktop/test/static'
+UPLOAD_FOLDER = '/Users/vansh/Desktop/test/upload_images'
 
 def get_landmark_coordinates(image_path):
     # Initialize a list to store x and y coordinates
@@ -292,7 +292,7 @@ def get_array():
                     flanme = secure_filename(image.filename)
                     image.save(os.path.join(app.config['UPLOAD_FOLDER'],flanme))
                 fname = image.filename    
-                data_to_send = get_landmark_coordinates('/Users/vansh/Desktop/test/static/{}'.format(fname))
+                data_to_send = get_landmark_coordinates('/Users/vansh/Desktop/test/upload_images/{}'.format(fname))
                 print(data_to_send)
                 if data_to_send is not None:
                     suggestions = evaluate_surya_namaskar_pose(data_to_send)
