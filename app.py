@@ -14,7 +14,7 @@ from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 
 
-UPLOAD_FOLDER = '/Users/vansh/Desktop/test/static'
+#UPLOAD_FOLDER = '/Users/vansh/Desktop/test/upload_images'
 
 def get_landmark_coordinates(image_path):
     # Initialize a list to store x and y coordinates
@@ -280,35 +280,44 @@ def evaluate_surya_namaskar_pose(landmarks):
 
 
 app = Flask(__name__, template_folder="template")
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+#app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/get_array', methods=['POST'])
 def get_array():
     if request.method == 'POST':
-        if 'file' in request.files:
-            image = request.files['file']
-            if image is not None:
-                if image:
-                    flanme = secure_filename(image.filename)
-                    image.save(os.path.join(app.config['UPLOAD_FOLDER'],flanme))
-                fname = image.filename    
-                data_to_send = get_landmark_coordinates('/Users/vansh/Desktop/test/static/{}'.format(fname))
-                print(data_to_send)
-                if data_to_send is not None:
-                    suggestions = evaluate_surya_namaskar_pose(data_to_send)
-                    return jsonify(suggestions)
-                else:
-                    print("Error: Failed to process the image")
-                    return "Error: Failed to process the image", 500
-            else:
-                print("Error: No valid image provided in the request")
-                return "Error: No valid image provided in the request", 400
+        #print(data_to_send)
+        data_to_send = get_landmark_coordinates('/Users/vansh/Desktop/test/pose2.jpg')
+        if data_to_send is not None:
+           suggestions = evaluate_surya_namaskar_pose(data_to_send)
+           return jsonify(suggestions)
         else:
-            print("Error: 'image' not found in the request")
-            return "Error: 'image' not found in the request", 400
-    else:
-        print("Error: Invalid request method")
-        return "Error: Invalid request method", 405
+            #print("Error: Failed to process the image")
+            return "Error: Failed to process the image", 500
+        # if 'file' in request.files:
+        #     image = request.files['file']
+        #     if image is not None:
+        #         if image:
+        #             flanme = secure_filename(image.filename)
+        #             image.save(os.path.join(app.config['UPLOAD_FOLDER'],flanme))
+        #         fname = image.filename    
+                #data_to_send = get_landmark_coordinates('/Users/vansh/Desktop/test/upload_images/{}'.format(fname))
+    #             data_to_send = get_landmark_coordinates('/Users/vansh/Desktop/test/pose2.jpg')
+    #             print(data_to_send)
+    #             if data_to_send is not None:
+    #                 suggestions = evaluate_surya_namaskar_pose(data_to_send)
+    #                 return jsonify(suggestions)
+    #             else:
+    #                 print("Error: Failed to process the image")
+    #                 return "Error: Failed to process the image", 500
+    #         else:
+    #             print("Error: No valid image provided in the request")
+    #             return "Error: No valid image provided in the request", 400
+    #     else:
+    #         print("Error: 'image' not found in the request")
+    #         return "Error: 'image' not found in the request", 400
+    # else:
+    #     print("Error: Invalid request method")
+    #     return "Error: Invalid request method", 405
       
 
 @app.errorhandler(500)
