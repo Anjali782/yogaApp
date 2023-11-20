@@ -296,7 +296,8 @@ def get_array():
                 # print(data_to_send)
                 if data_to_send is not None:
                     suggestions = evaluate_surya_namaskar_pose(data_to_send)
-                    return jsonify(suggestions)
+                    return render_template('home.html', suggestions=suggestions)
+                    # return jsonify(suggestions)
                 else:
                     print("Error: Failed to process the image")
                     return "Error: Failed to process the image", 500
