@@ -286,32 +286,48 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def home():
     return render_template('home.html')
 
+
 @app.route('/get_array', methods=['POST'])
 def get_array():
-    if request.method == 'POST':
-        if 'image' not in request.files:
-            return redirect('/')
-        else:
-            image = request.files['image']
-            if image is not None:    
-                filename = secure_filename(image.filename)
-                image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                image.save(image_path)
-                data_to_send = get_landmark_coordinates(image_path)
-                suggestions = evaluate_surya_namaskar_pose(data_to_send)
-                return render_template('result.html', suggestions=suggestions)
+    try:
+        if request.method == 'POST':
+            if 'image' not in request.files:
+                return redirect('/')
             else:
-                print("Error: No valid image provided in the request")
-                return jsonify({
-                    'success': False,
-                    'message': 'No valid image provided in the request'
-                }), 400
-    else:
-        print("Error: Invalid request method")
+                image = request.files['image']
+                if image is not None:
+                    filename = secure_filename(image.filename)
+                    image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    image.save(image_path)
+
+                    try:
+                        data_to_send = get_landmark_coordinates(image_path)
+                        suggestions = evaluate_surya_namaskar_pose(data_to_send)
+                        return render_template('result.html', suggestions=suggestions)
+                    except Exception as e:
+                        print(f"Error processing image: {e}")
+                        return jsonify({
+                            'success': False,
+                            'message': 'Failed to process the image'
+                        }), 500
+                else:
+                    print("Error: No valid image provided in the request")
+                    return jsonify({
+                        'success': False,
+                        'message': 'No valid image provided in the request'
+                    }), 400
+        else:
+            print("Error: Invalid request method")
+            return jsonify({
+                'success': False,
+                'message': 'Invalid request method'
+            }), 405
+    except Exception as e:
+        print(f"Unexpected error occurred: {e}")
         return jsonify({
             'success': False,
-            'message': 'Invalid request method'
-        }), 405
+            'message': 'An unexpected error occurred. Please try again later.'
+        }), 500
       
 
 if __name__ == '__main__':
