@@ -1,10 +1,38 @@
 <!DOCTYPE html>
-<html>
-    <head></head>
-    <body>
-        <div>
-          <h1>Jane Doe</h1>
-          <p>Hello, I'm a cereal killer.</p>
-      </div>
-    </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+
+<h1>Data from Flask</h1>
+<div id="data-container"></div>
+
+<script>
+    // Make an asynchronous request to Flask server
+    async function fetchData() {
+        const response = await fetch('/get_array', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            // You can include any additional data needed for the request
+            body: JSON.stringify({
+                // Add data if needed
+            })
+        });
+
+        const data = await response.json();
+
+        // Update the content in the 'data-container' div
+        document.getElementById('data-container').innerText = data;
+    }
+
+    // Call the function when the page loads
+    window.onload = fetchData;
+</script>
+
+</body>
 </html>
