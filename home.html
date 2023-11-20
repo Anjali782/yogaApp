@@ -6,26 +6,26 @@
     <title>Home</title>
 </head>
 <body>
-    <h1>Data from Flask</h1>
-    <input type="file" id="fileInput" accept="image/*">
-    <div id="data-container"></div>
+
+<h1>Data from Flask</h1>
+<div id="data-container"></div>
+<input type="file" id="fileInput" accept="image/*">
+
+
+<button onclick="fetchData()">Fetch Data</button>
 
 <script>
-    // Make an asynchronous request to Flask server with an image
+    // Make an asynchronous request to Flask server
     async function fetchData() {
-        // Create FormData object to handle file upload
-        const formData = new FormData();
-
-        // Select the file input element
-        const fileInput = document.querySelector('input[type="file"]');
-        // Append the selected file to the FormData object
-        formData.append('image', fileInput.files[0]);
-
-        // Make the POST request
         const response = await fetch('/get_array', {
             method: 'POST',
-            // Don't set 'Content-Type' as it will be set automatically by FormData
-            body: formData
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            // You can include any additional data needed for the request
+            body: JSON.stringify({
+                // Add data if needed
+            })
         });
 
         const data = await response.json();
@@ -33,9 +33,6 @@
         // Update the content in the 'data-container' div
         document.getElementById('data-container').innerText = data;
     }
-
-    // Call the function when the page loads
-    window.onload = fetchData;
 </script>
 
 </body>
