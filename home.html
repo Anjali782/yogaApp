@@ -8,37 +8,16 @@
 <body>
 
 <h1>Data from Flask</h1>
-<div id="data-container"></div>
-<input type="file" id="fileInput" accept="image/*">
 
-
-<!-- Add a button to trigger fetchData -->
-<button onclick="fetchData()">Fetch Data</button>
-
-<script>
-    // Make an asynchronous request to Flask server with an image
-    async function fetchData() {
-        // Create FormData object to handle file upload
-        const formData = new FormData();
-
-        // Select the file input element
-        const fileInput = document.querySelector('input[type="file"]');
-        // Append the selected file to the FormData object
-        formData.append('image', fileInput.files[0]);
-
-        // Make the POST request
-        const response = await fetch('/get_array', {
-            method: 'POST',
-            // Don't set 'Content-Type' as it will be set automatically by FormData
-            body: formData
-        });
-
-        const data = await response.json();
-
-        // Update the content in the 'data-container' div
-        document.getElementById('data-container').innerText = data;
-    }
-</script>
+<!-- Display suggestions -->
+<div id="suggestions-container">
+    <h2>Suggestions:</h2>
+    <ul>
+        {% for suggestion in suggestions %}
+            <li>{{ suggestion }}</li>
+        {% endfor %}
+    </ul>
+</div>
 
 </body>
 </html>
