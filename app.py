@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from werkzeug.utils import secure_filename
 from PIL import Image
 
@@ -316,7 +316,11 @@ def get_array():
 def internal_server_error(e):
     return "Internal Server Error", 500
 
+@app.route("/")
+def home():
+    return render_template('home.html')
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(debug=True)
 
 
