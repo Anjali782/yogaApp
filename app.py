@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, redirect, Response
 from werkzeug.utils import secure_filename
 from PIL import Image
 
@@ -323,13 +323,15 @@ def evaluate_surya_namaskar_pose(landmarks):
 # if __name__ == '__main__':
 #     app.run(debug=True)
 
-# UPLOAD_FOLDER = '/upload_images'
-UPLOAD_FOLDER = os.path.join(os.getcwd(), 'upload_images')
+UPLOAD_FOLDER = './upload_images'
 app = Flask(__name__, template_folder="template")
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-if not os.path.exists(app.config['UPLOAD_FOLDER']):
-    os.makedirs(app.config['UPLOAD_FOLDER'])
+
+@app.route('/')
+def home():
+    logger.debug('Received GET for /')
+    return render_template('home.html')
 
 @app.route('/get_array', methods=['POST'])
 def get_array():
