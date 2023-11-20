@@ -14,7 +14,7 @@ from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 
 
-UPLOAD_FOLDER = '/Users/vansh/Desktop/test/upload_images'
+UPLOAD_FOLDER = '/upload_images'
 
 def get_landmark_coordinates(image_path):
     # Initialize a list to store x and y coordinates
