@@ -277,6 +277,52 @@ def evaluate_surya_namaskar_pose(landmarks):
 
     return suggestions
 
+# UPLOAD_FOLDER = '/upload_images'
+# app = Flask(__name__, template_folder="template")
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# @app.route('/get_array', methods=['POST'])
+# def get_array():
+#     if request.method == 'POST':
+#         if 'file' in request.files:
+#             image = request.files['file']
+#             if image is not None:    
+#                 flanme = secure_filename(image.filename)
+#                 image_path = os.path.join(app.config['UPLOAD_FOLDER'],flanme)
+#                 image.save(image_path)
+#                 #fname = image.filename    
+#                 #data_to_send = get_landmark_coordinates('/Users/vansh/Desktop/test/upload_images/{}'.format(fname))
+#                 data_to_send = get_landmark_coordinates(image_path)
+#                 # print(data_to_send)
+#                 if data_to_send is not None:
+#                     suggestions = evaluate_surya_namaskar_pose(data_to_send)
+#                     return render_template('home.html', suggestions=suggestions)
+#                     # return jsonify(suggestions)
+#                 else:
+#                     print("Error: Failed to process the image")
+#                     return "Error: Failed to process the image", 500
+#             else:
+#                 print("Error: No valid image provided in the request")
+#                 return "Error: No valid image provided in the request", 400
+#         else:
+#             print("Error: 'image' not found in the request")
+#             return "Error: 'image' not found in the request", 400
+#     else:
+#         print("Error: Invalid request method")
+#         return "Error: Invalid request method", 405
+      
+
+# @app.errorhandler(500)
+# def internal_server_error(e):
+#     return "Internal Server Error", 500
+
+# # @app.route("/")
+# # def home():
+# #     return render_template('home.html')
+
+# if __name__ == '__main__':
+#     app.run(debug=True)
+
 UPLOAD_FOLDER = '/upload_images'
 app = Flask(__name__, template_folder="template")
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -287,40 +333,54 @@ def get_array():
         if 'file' in request.files:
             image = request.files['file']
             if image is not None:    
-                flanme = secure_filename(image.filename)
-                image_path = os.path.join(app.config['UPLOAD_FOLDER'],flanme)
+                filename = secure_filename(image.filename)
+                image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 image.save(image_path)
-                #fname = image.filename    
-                #data_to_send = get_landmark_coordinates('/Users/vansh/Desktop/test/upload_images/{}'.format(fname))
+
                 data_to_send = get_landmark_coordinates(image_path)
-                # print(data_to_send)
+
                 if data_to_send is not None:
                     suggestions = evaluate_surya_namaskar_pose(data_to_send)
-                    return render_template('home.html', suggestions=suggestions)
-                    # return jsonify(suggestions)
+                    return render_template('home.html', suggestions=suggestions), jsonify({
+                        'success': True,
+                        'message': 'Image processed successfully',
+                        'suggestions': suggestions
+                    })
                 else:
                     print("Error: Failed to process the image")
-                    return "Error: Failed to process the image", 500
+                    return jsonify({
+                        'success': False,
+                        'message': 'Failed to process the image'
+                    }), 500
             else:
                 print("Error: No valid image provided in the request")
-                return "Error: No valid image provided in the request", 400
+                return jsonify({
+                    'success': False,
+                    'message': 'No valid image provided in the request'
+                }), 400
         else:
             print("Error: 'image' not found in the request")
-            return "Error: 'image' not found in the request", 400
+            return jsonify({
+                'success': False,
+                'message': "'image' not found in the request"
+            }), 400
     else:
         print("Error: Invalid request method")
-        return "Error: Invalid request method", 405
+        return jsonify({
+            'success': False,
+            'message': 'Invalid request method'
+        }), 405
       
 
 @app.errorhandler(500)
 def internal_server_error(e):
-    return "Internal Server Error", 500
-
-# @app.route("/")
-# def home():
-#     return render_template('home.html')
+    return jsonify({
+        'success': False,
+        'message': 'Internal Server Error'
+    }), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
+
 
 
