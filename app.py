@@ -284,7 +284,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def home():
-    logger.debug('Received GET for /')
     return render_template('home.html')
 
 @app.route('/get_array', methods=['POST'])
@@ -298,18 +297,9 @@ def get_array():
                 filename = secure_filename(image.filename)
                 image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 image.save(image_path)
-
                 data_to_send = get_landmark_coordinates(image_path)
-
-                if data_to_send is not None:
-                    suggestions = evaluate_surya_namaskar_pose(data_to_send)
-                    return render_template('result.html', suggestions=suggestions)
-                else:
-                    print("Error: Failed to process the image")
-                    return jsonify({
-                        'success': False,
-                        'message': 'Failed to process the image'
-                    }), 500
+                suggestions = evaluate_surya_namaskar_pose(data_to_send)
+                return render_template('result.html', suggestions=suggestions)
             else:
                 print("Error: No valid image provided in the request")
                 return jsonify({
