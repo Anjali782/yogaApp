@@ -278,7 +278,7 @@ def evaluate_surya_namaskar_pose(landmarks):
     return suggestions
 
 UPLOAD_FOLDER = './upload_images'
-app = Flask(__name__, template_folder="template")
+app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
