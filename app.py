@@ -290,10 +290,10 @@ def home():
 @app.route('/get_array', methods=['POST'])
 def get_array():
     if request.method == 'POST':
-        if 'file' not in request.files:
+        if 'image' not in request.files:
             return redirect('/')
         else:
-            image = request.files['file']
+            image = request.files['image']
             if image is not None:    
                 filename = secure_filename(image.filename)
                 image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
