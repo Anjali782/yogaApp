@@ -14,7 +14,6 @@ from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 
 
-UPLOAD_FOLDER = '/upload_images'
 
 def get_landmark_coordinates(image_path):
     # Initialize a list to store x and y coordinates
@@ -278,7 +277,7 @@ def evaluate_surya_namaskar_pose(landmarks):
 
     return suggestions
 
-
+UPLOAD_FOLDER = '/upload_images'
 app = Flask(__name__, template_folder="template")
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
